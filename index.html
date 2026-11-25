@@ -66,6 +66,13 @@ select,input{font:inherit;padding:10px;border-radius:8px;border:1px solid var(--
 .av2{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;flex:none;background:linear-gradient(135deg,var(--a),var(--b))}
 .cc{display:flex;gap:10px;align-items:center}
 .ov{position:fixed;inset:0;background:var(--bg);z-index:30;overflow:auto;padding:22px 14px;display:flex;flex-direction:column;align-items:center}
+.pt{width:var(--s,56px);height:var(--s,56px);border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 30%,var(--b),var(--a));box-shadow:0 0 0 3px var(--a),0 8px 22px rgba(0,0,0,.4);flex:none}
+.pt svg{width:100%;height:100%;display:block}.pt.bob{animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.cb{display:flex;gap:12px;align-items:center;margin:0 0 16px}
+.bub{position:relative;background:var(--card);border-radius:14px;padding:11px 15px;font-size:.96rem;animation:pop .4s both}.cb .bub{flex:1}
+.cb .bub::before{content:"";position:absolute;left:-7px;top:20px;border:7px solid transparent;border-left:0;border-right-color:var(--card)}
+input[type=checkbox]{padding:0;width:18px;height:18px;vertical-align:middle}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
@@ -77,7 +84,7 @@ select,input{font:inherit;padding:10px;border-radius:8px;border:1px solid var(--
 </nav>
 <main>
 <section id="v-home">
-<div class="hero"><div><h1>Play chess. Learn it. Get better.</h1><p>Take on the computer, challenge a friend online, and let your coach explain every move. Everything is free.</p><p id="prf" style="margin-top:10px;color:var(--ac);font-weight:700"></p></div><div class="knight" aria-hidden="true">♞</div></div>
+<div class="hero"><div><h1>Play chess. Learn it. Get better.</h1><p>Take on the computer, challenge a friend online, and let your coach explain every move. Everything is free.</p><p id="prf" style="margin-top:10px;color:var(--ac);font-weight:700"></p><div class="bub" id="hb" style="margin-top:12px;max-width:30em"></div></div><div class="pt bob" id="hc" style="--s:min(34vw,150px)"></div></div>
 <div class="cards">
 <button class="card big" id="c-ai" style="--d:.05s"><span class="ic">♚</span><b>Play a bot</b><span class="m">16 bots, ratings 250 to 2500</span></button>
 <button class="card" id="c-two" style="--d:.12s"><span class="ic">♛</span><b>Pass and play</b><span class="m">Two players, one device</span></button>
@@ -103,7 +110,7 @@ select,input{font:inherit;padding:10px;border-radius:8px;border:1px solid var(--
 </div>
 <div class="pnl">
 <b id="st"></b>
-<div class="cc"><div class="av2" id="cav"></div><div style="flex:1"><b id="cn" style="font-size:.85rem"></b><div id="coach"></div></div></div>
+<div class="cc"><div class="pt bob" id="cav" style="--s:64px"></div><div style="flex:1"><b id="cn" style="font-size:.85rem"></b><div id="coach"></div></div></div>
 <div class="ml" id="gml"></div>
 <div class="row"><button class="btn" id="hint">Hint</button><button class="btn" id="undo">Undo</button></div>
 <select id="lv" aria-label="Difficulty"><option value="0">Easy</option><option value="1" selected>Medium</option><option value="2">Hard</option></select>
@@ -113,14 +120,14 @@ select,input{font:inherit;padding:10px;border-radius:8px;border:1px solid var(--
 </section>
 
 <section id="v-learn" hidden>
-<div id="ll"><h2>Free lessons</h2><div class="cards" id="lc"></div></div>
+<div id="ll"><div class="cb" id="cb-learn"></div><h2>Free lessons</h2><div class="cards" id="lc"></div></div>
 <div id="lv2" class="lb" hidden>
 <h2 id="lh"></h2><div class="bd" id="lb"></div><div class="note" id="lt"></div>
 <div class="row" style="margin-top:12px"><button class="btn" id="lp">Back</button><button class="btn pri" id="ln">Next</button></div>
 </div>
 </section>
 
-<section id="v-review" hidden>
+<section id="v-review" hidden><div class="cb" id="cb-review"></div>
 <div id="rn" class="note" hidden>No game to review yet. Play one first and your coach will grade it.</div>
 <div class="gw" id="rg">
 <div><div class="brow"><div class="eb"><i id="rev"></i></div><div class="bd" id="rb"></div></div></div>
@@ -133,14 +140,19 @@ select,input{font:inherit;padding:10px;border-radius:8px;border:1px solid var(--
 </div>
 </div>
 </section>
-<section id="v-bots" hidden><h2>Choose a bot</h2><div class="note" style="margin-bottom:12px">Ratings are estimates. Higher bots calculate deeper and make fewer random mistakes.</div><div class="cards" id="bl"></div></section>
-<section id="v-skins" hidden><h2>Piece skins</h2><div class="note" id="skm" style="margin-bottom:12px"></div><div class="cards" id="sk"></div></section>
-<section id="v-prof" hidden><h2>Profile</h2><div class="note" id="pi" style="margin-bottom:12px"></div><h2>Your coach</h2><div class="cards" id="pcl"></div>
+<section id="v-bots" hidden><div class="cb" id="cb-bots"></div><h2>Choose a bot</h2><div class="note" style="margin-bottom:12px">Ratings are estimates. Higher bots calculate deeper and make fewer random mistakes.</div><div class="cards" id="bl"></div></section>
+<section id="v-skins" hidden><div class="cb" id="cb-skins"></div><h2>Piece skins</h2><div class="note" id="skm" style="margin-bottom:12px"></div><div class="cards" id="sk"></div></section>
+<section id="v-prof" hidden><div class="cb" id="cb-prof"></div><h2>Profile</h2><div class="note" id="pi" style="margin-bottom:12px"></div><h2>Your coach</h2><div class="cards" id="pcl"></div>
 <h2>Backup</h2><div class="note">Progress is saved in this browser. Copy a backup code to protect it or move it to another device.</div>
 <div class="row" style="margin-top:10px"><button class="btn" id="bk">Copy backup code</button><button class="btn" id="rs">Restore</button></div>
-<textarea id="bt" rows="3" placeholder="Paste a backup code here, then tap Restore" style="width:100%;margin-top:10px;font:inherit;padding:10px;border-radius:8px;border:1px solid var(--ln);background:var(--card);color:var(--ink)"></textarea></section>
+<textarea id="bt" rows="3" placeholder="Paste a backup code here, then tap Restore" style="width:100%;margin-top:10px;font:inherit;padding:10px;border-radius:8px;border:1px solid var(--ln);background:var(--card);color:var(--ink)"></textarea><button class="btn" id="lo" style="margin-top:14px;width:100%">Log out</button></section>
 </main>
 </div>
+<div id="auth" class="ov" hidden style="z-index:40;justify-content:center"><div id="alin" style="display:flex;margin:6px 0 14px"></div><h2 style="margin:0 0 12px;font-size:1.9rem">Chessroom</h2>
+<div class="pnl" style="width:min(100%,360px)"><div class="row"><button class="btn pri" id="tl">Log in</button><button class="btn" id="tr">Create account</button></div>
+<input id="au" placeholder="Username" autocomplete="username" autocapitalize="off" spellcheck="false"><input id="apw" type="password" placeholder="Password" autocomplete="current-password">
+<label style="font-size:.9rem"><input type="checkbox" id="ak" checked> Keep me signed in on this device</label>
+<button class="btn pri" id="ago">Log in</button><div class="note" id="am">Accounts are saved on this device. There is no password reset, so keep your backup code.</div></div></div>
 <div id="cpick" class="ov" hidden><h2>Choose your coach</h2><div class="cards" id="cpl" style="width:100%;max-width:560px"></div></div>
 <script>
 var U={K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'},NM={K:'king',Q:'queen',R:'rook',B:'bishop',N:'knight',P:'pawn'};
@@ -363,11 +375,30 @@ $('#an').onclick=function(){an=[];var i=0;$('#an').disabled=true;
       $('#ap').textContent='White accuracy '+acc('w')+'%. Black accuracy '+acc('b')+'%. Blunders: '+bl+'.';mlist('#rml',true);return}
     an[i]=rate(states[i],ml[i].m);i++;$('#ap').textContent='Analyzing '+i+' of '+ml.length+'…';setTimeout(step,0)})()};
 
+var SVG=x=>'<svg viewBox="0 0 100 100" aria-hidden="true">'+x+'</svg>';
+var TS=c=>'<path d="M10 100c2-26 18-36 40-36s38 10 40 36z" fill="'+c+'"/>';
+var HD=k=>'<rect x="43" y="54" width="14" height="14" rx="5" fill="'+k+'"/><ellipse cx="50" cy="40" rx="19" ry="21" fill="'+k+'"/>';
 var COACHES=[
-{n:'Coach Maya',a:'👩‍🏫',x:['#ff8a65','#ffb74d'],bio:'Warm and encouraging',L:{greet:'Hi, I’m Maya! I’ll cheer you on and explain every move.',Best:'Wonderful! That’s exactly what I’d play.',Good:'Nice move, solid and sensible.',Inaccuracy:'Hmm, there was something a little better.',Mistake:'Careful, that gives your opponent a chance.',Blunder:'Ouch! Let’s learn from that one.',win:'You did it! I’m so proud of you.',lose:'Good fight. We’ll review it and come back stronger.'}},
-{n:'Grandmaster Volkov',a:'🧔',x:['#455a64','#90a4ae'],bio:'Strict, precise, no excuses',L:{greet:'Volkov. Think before you move. I will tell you the truth.',Best:'Correct. Do that again.',Good:'Acceptable.',Inaccuracy:'Imprecise. Look harder.',Mistake:'A mistake. You rushed.',Blunder:'Unacceptable. Check every capture first.',win:'Victory. Do not get comfortable.',lose:'You lost. Study the mistakes.'}},
-{n:'Pixel',a:'🤖',x:['#26c6da','#7e57c2'],bio:'Cheerful robot who loves tactics',L:{greet:'Beep boop! I’m Pixel. Let’s find some tactics!',Best:'Computing… perfect move! +100 style points.',Good:'Good move detected.',Inaccuracy:'Small glitch. A better move exists.',Mistake:'Error found! Material may be at risk.',Blunder:'Critical error! Please recalculate.',win:'Checkmate achieved! Celebration mode on.',lose:'Game lost. Updating strategy files…'}},
-{n:'Rex',a:'😎',x:['#ef5350','#ffa726'],bio:'Hype coach with big energy',L:{greet:'Yo, I’m Rex! Let’s go win this thing!',Best:'BOOM! Absolute killer move!',Good:'Smooth. Keep the pressure on!',Inaccuracy:'Eh, you can do better, champ.',Mistake:'Oof, shake it off!',Blunder:'Yikes! Big swing. Reset and fight back!',win:'LET’S GOOO! Champion!',lose:'Tough one. We bounce back!'}}];
+{n:'Coach Maya',x:['#ff8a65','#ffd180'],bio:'Warm and encouraging',
+ svg:SVG('<path d="M68 30c14 4 16 24 6 38-1-14-4-22-10-28z" fill="#6b3f2a"/>'+TS('#ff8a65')+'<path d="M38 66l12 16 12-16z" fill="#fff"/>'+HD('#f2c3a0')+'<path d="M30 40c-3-20 9-31 20-31s23 11 20 31c-3-10-9-15-20-15s-17 5-20 15z" fill="#6b3f2a"/><circle cx="37" cy="48" r="3.5" fill="#ff8a8a" opacity=".6"/><circle cx="63" cy="48" r="3.5" fill="#ff8a8a" opacity=".6"/><circle cx="42" cy="41" r="2.3" fill="#2b1b12"/><circle cx="58" cy="41" r="2.3" fill="#2b1b12"/><g fill="none" stroke="#c0392b" stroke-width="1.8"><circle cx="42" cy="41" r="6.5"/><circle cx="58" cy="41" r="6.5"/><path d="M48.5 41h3"/></g><path d="M43 50q7 6 14 0" stroke="#a5483a" stroke-width="2" fill="none" stroke-linecap="round"/>'),
+ L:{greet:'Hi, I’m Maya! I’ll cheer you on and explain every move.',Best:'Wonderful! That’s exactly what I’d play.',Good:'Nice move, solid and sensible.',Inaccuracy:'Hmm, there was something a little better.',Mistake:'Careful, that gives your opponent a chance.',Blunder:'Ouch! Let’s learn from that one.',win:'You did it! I’m so proud of you.',lose:'Good fight. We’ll review it and come back stronger.',
+ home:['Welcome back! Ready for a game?','Tip: control the center early.','Every game makes you better.'],bots:'Pick an opponent. Start easy and work your way up!',skins:'Ooh, new looks for your pieces!',learn:'Lessons are free. Let’s learn together.',prof:'This is your chess home. Keep your backup safe!',review:'Let’s look at your game and learn from it.'}},
+{n:'Grandmaster Volkov',x:['#455a64','#90a4ae'],bio:'Strict, precise, no excuses',
+ svg:SVG(TS('#37474f')+'<path d="M40 66l10 12 10-12z" fill="#eceff1"/><path d="M47 72h6l3 22-6 4-6-4z" fill="#c62828"/>'+HD('#e8b997')+'<path d="M31 42c-3-9 0-18 6-22-3 9-3 17-1 25zM69 42c3-9 0-18-6-22 3 9 3 17 1 25z" fill="#b0bec5"/><path d="M31 46c0 17 8 25 19 25s19-8 19-25c-4 7-10 9-19 9s-15-2-19-9z" fill="#cfd8dc"/><path d="M40 53q10-5 20 0" stroke="#b0bec5" stroke-width="3" fill="none"/><path d="M35 35l11 4M65 35l-11 4" stroke="#546e7a" stroke-width="3.2" stroke-linecap="round"/><circle cx="42" cy="42" r="2.2" fill="#1b1b1b"/><circle cx="58" cy="42" r="2.2" fill="#1b1b1b"/><circle cx="58" cy="42" r="7" fill="none" stroke="#ffc107" stroke-width="1.8"/><path d="M63 48q4 14-2 22" stroke="#ffc107" fill="none"/>'),
+ L:{greet:'Volkov. Think before you move. I will tell you the truth.',Best:'Correct. Do that again.',Good:'Acceptable.',Inaccuracy:'Imprecise. Look harder.',Mistake:'A mistake. You rushed.',Blunder:'Unacceptable. Check every capture first.',win:'Victory. Do not get comfortable.',lose:'You lost. Study the mistakes.',
+ home:['Sit. Play. Improve.','Develop your pieces. Castle early.','Discipline wins games.'],bots:'Choose your opponent. Do not choose too easy.',skins:'Pieces do not win games. Players do. Still, buy what you like.',learn:'Study. There is no shortcut.',prof:'Your record. Be honest with it.',review:'Review your mistakes. This is how you grow.'}},
+{n:'Pixel',x:['#26c6da','#7e57c2'],bio:'Cheerful robot who loves tactics',
+ svg:SVG('<path d="M50 22v-10" stroke="#90a4ae" stroke-width="3"/><circle cx="50" cy="10" r="4.5" fill="#ff4081"/>'+TS('#7e57c2')+'<circle cx="50" cy="86" r="5.5" fill="#00e5ff"/><rect x="43" y="58" width="14" height="12" fill="#78909c"/><rect x="21" y="34" width="6" height="14" rx="3" fill="#90a4ae"/><rect x="73" y="34" width="6" height="14" rx="3" fill="#90a4ae"/><rect x="27" y="21" width="46" height="40" rx="12" fill="#cfd8dc"/><rect x="32" y="31" width="36" height="15" rx="7.5" fill="#1a237e"/><circle cx="43" cy="38.5" r="4" fill="#00e5ff"/><circle cx="57" cy="38.5" r="4" fill="#00e5ff"/><path d="M36 34h10" stroke="#fff" opacity=".5" stroke-width="2"/><path d="M41 53h18" stroke="#546e7a" stroke-width="3" stroke-dasharray="2.5 2.5" stroke-linecap="round"/>'),
+ L:{greet:'Beep boop! I’m Pixel. Let’s find some tactics!',Best:'Computing… perfect move! +100 style points.',Good:'Good move detected.',Inaccuracy:'Small glitch. A better move exists.',Mistake:'Error found! Material may be at risk.',Blunder:'Critical error! Please recalculate.',win:'Checkmate achieved! Celebration mode on.',lose:'Game lost. Updating strategy files…',
+ home:['Beep! Games loaded and ready.','Fun fact: knights can fork two pieces at once.','Initializing awesome… done!'],bots:'Scanning opponents… 16 found!',skins:'Installing fresh skins! Shiny!',learn:'Downloading knowledge… 100%.',prof:'Profile data looking good.',review:'Analyzing your game logs, human.'}},
+{n:'Rex',x:['#ef5350','#ffb300'],bio:'Hype coach with big energy',
+ svg:SVG(TS('#ffb300')+'<path d="M42 66v18M58 66v18" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M52 86l-6 8h5l-2 7 8-10h-5z" fill="#e53935"/>'+HD('#c68642')+'<path d="M29 40l-7-15 13 6 1-15 11 10 7-13 6 14 11-7-3 18c-5-9-13-12-23-12s-18 3-24 12z" fill="#e53935"/><rect x="30" y="35" width="18" height="11" rx="4.5" fill="#111"/><rect x="52" y="35" width="18" height="11" rx="4.5" fill="#111"/><path d="M48 39h4" stroke="#111" stroke-width="2"/><path d="M33 37h6" stroke="#fff" opacity=".45" stroke-width="2"/><path d="M41 51q9 10 18 0z" fill="#fff" stroke="#7a3b2e" stroke-width="1.6" stroke-linejoin="round"/>'),
+ L:{greet:'Yo, I’m Rex! Let’s go win this thing!',Best:'BOOM! Absolute killer move!',Good:'Smooth. Keep the pressure on!',Inaccuracy:'Eh, you can do better, champ.',Mistake:'Oof, shake it off!',Blunder:'Yikes! Big swing. Reset and fight back!',win:'LET’S GOOO! Champion!',lose:'Tough one. We bounce back!',
+ home:['Yo champ! Let’s play!','Pro tip: attack with confidence!','Time to climb that rating!'],bots:'Who’s getting beaten today?!',skins:'Drip check! Pick a fresh skin!',learn:'Level up your game, champ!',prof:'Look at that profile. Respect!',review:'Let’s break down the highlights!'}},
+{n:'Luna',x:['#3949ab','#9575cd'],bio:'Calm and thoughtful',
+ svg:SVG('<path d="M27 44c-7-32 10-40 23-40s30 8 23 40c2 18 5 34 9 46H18c4-12 7-28 9-46z" fill="#3949ab"/>'+TS('#9575cd')+'<path d="M42 68l8 12 8-12z" fill="#ede7f6"/><path d="M50 88l1.8 4 4.2.4-3.2 2.8 1 4.2-3.8-2.3-3.8 2.3 1-4.2-3.2-2.8 4.2-.4z" fill="#ffd54f"/>'+HD('#f5d0bd')+'<path d="M30 38c5-14 35-16 40 0-9-6-15-8-20-8s-11 2-20 8z" fill="#3949ab"/><path d="M30 38c-2 10-1 18 2 24-4-6-6-14-2-24zM70 38c2 10 1 18-2 24 4-6 6-14 2-24z" fill="#3949ab"/><path d="M66 18a8 8 0 1 0 7 11 6.5 6.5 0 1 1-7-11z" fill="#ffd54f"/><circle cx="37" cy="48" r="3.5" fill="#ff9aa2" opacity=".5"/><circle cx="63" cy="48" r="3.5" fill="#ff9aa2" opacity=".5"/><path d="M37 42q5 4 10 0M53 42q5 4 10 0" stroke="#2b2b52" fill="none" stroke-width="2.2" stroke-linecap="round"/><path d="M45 51q5 3.5 10 0" stroke="#b5655b" stroke-width="2" fill="none" stroke-linecap="round"/>'),
+ L:{greet:'Hello. Let’s play mindfully.',Best:'Beautiful. The move flows.',Good:'A calm, steady choice.',Inaccuracy:'A gentle slip. A better path exists.',Mistake:'Breathe. That move leaves a weakness.',Blunder:'It’s okay. Even masters blunder. Learn from it.',win:'Well played. Peace and victory.',lose:'Every loss teaches something.',
+ home:['Welcome. Take a deep breath.','The best move is rarely the loudest.','Patience is a strong piece.'],bots:'Choose an opponent that feels right.',skins:'There is beauty in the pieces, too.',learn:'Every lesson is a small step forward.',prof:'Your journey so far.',review:'Reflect, then improve. That is the way.'}}];
 var BL=[['Pip','🐣',250,'Chirp! Which one is the horse?'],['Bubbles','🫧',400,'Pop pop! My pawns go anywhere.'],['Nelson','🐢',550,'I think slowly. Not well, though.'],['Cookie','🍪',700,'Crumbs of strategy.'],['Blossom','🌸',850,'Gentle moves, sneaky plans.'],['Finn','🦊',1000,'Watch out for my tricks.'],['Zara','⚡',1150,'Fast, sharp, no mercy.'],['Otto','🤖',1300,'Calculating… calculating…'],['Nova','🌙',1450,'I play best at night.'],['Ranger','🛡️',1600,'My defense never breaks.'],['Viktor','🦅',1750,'I see everything.'],['Ember','🔥',1900,'Burn the center down.'],['Mira','🧠',2050,'Ten moves ahead.'],['Ivan','🐻',2200,'Slow. Heavy. Unstoppable.'],['Atlas','🌍',2350,'I carry the whole board.'],['Titan','👑',2500,'Bow to the king.']];
 var ol=(c,g)=>'-1px 0 '+c+',1px 0 '+c+',0 -1px '+c+',0 1px '+c+(g?',0 0 9px '+g:'');
 var SK={classic:{n:'Classic',p:0,w:'#fbfaf3',b:'#1c2321',ow:'#222',ob:'rgba(255,255,255,.3)'},
@@ -378,9 +409,11 @@ frost:{n:'Frost vs Ember',p:400,w:'#d6f1ff',b:'#ff7043',ow:'#0a3c5a',ob:'#5a1500
 sakura:{n:'Sakura',p:450,w:'#ffd9ec',b:'#5a2a4a',ow:'#7a2a56',ob:'#ffd9ec'},
 gold:{n:'Gold and Obsidian',p:500,w:'#ffd54a',b:'#222',ow:'#7a5a00',ob:'#ffd54a'},
 void:{n:'Void',p:700,w:'#e6e1ff',b:'#14123a',ow:'#3a2d8a',ob:'#b7a6ff',gw:'#7c4dff',gb:'#7c4dff'}};
-var P={t:100,elo:800,sk:'classic',own:{classic:1},coach:-1,g:0,w:0,l:0,d:0},OE=800,BOT=BL[3]&&null,awd=0,endTxt='',cd=0;
-try{var sv=JSON.parse(localStorage.getItem('chessroom-save'));if(sv&&sv.own)P=Object.assign(P,sv)}catch(e){}
-function save(){try{localStorage.setItem('chessroom-save',JSON.stringify(P))}catch(e){}}
+var P0=()=>({t:100,elo:800,sk:'classic',own:{classic:1},coach:-1,g:0,w:0,l:0,d:0}),P=P0(),OE=800,BOT=null,awd=0,endTxt='',cd=0,USERS={},CUR=null,OLD=null;
+try{USERS=JSON.parse(localStorage.getItem('cr-users'))||{}}catch(e){}
+try{OLD=JSON.parse(localStorage.getItem('chessroom-save'))}catch(e){}
+function su(){try{localStorage.setItem('cr-users',JSON.stringify(USERS))}catch(e){}}
+function save(){if(CUR&&USERS[CUR]){USERS[CUR].save=P;su()}}
 function applySkin(){var k=SK[P.sk]||SK.classic,r=document.documentElement.style;r.setProperty('--pw',k.w);r.setProperty('--pb',k.b);r.setProperty('--sw',ol(k.ow,k.gw));r.setProperty('--sb',ol(k.ob,k.gb))}
 function glyph(p){var k=p.toUpperCase();return((SK[P.sk]||{}).h&&isW(p)?'♔♕♖♗♘♙'['KQRBNP'.indexOf(k)]:U[k])+'\uFE0E'}
 function CO(){return COACHES[Math.max(0,P.coach)]}
@@ -423,10 +456,40 @@ $('#rs').onclick=()=>{try{var x=JSON.parse(decodeURIComponent(escape(atob($('#bt
   P=Object.assign({},P,{t:Math.max(0,x.t|0),elo:Math.max(100,Math.min(3500,x.elo|0||800)),own:own,sk:own[x.sk]?x.sk:'classic',coach:(x.coach>=0&&x.coach<COACHES.length)?x.coach|0:P.coach,g:x.g|0,w:x.w|0,l:x.l|0,d:x.d|0});
   save();applySkin();setCoach();cl($('#pcl'));prf();$('#pi').textContent='Progress restored. '+$('#pi').textContent}catch(e){$('#pi').textContent='That code doesn’t look right. Copy the whole code and try again.'}};
 $('#c-ai').onclick=()=>go('bots');
-applySkin();setCoach();prf();
-if(P.coach<0)cl($('#cpl'),()=>{$('#cpick').hidden=true;P.coach=Math.max(0,P.coach)});
-$('#cpick').hidden=P.coach>=0;
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+
+var REG=0;
+function setReg(r){REG=r;$('#tl').className='btn'+(r?'':' pri');$('#tr').className='btn'+(r?' pri':'');$('#ago').textContent=r?'Create account':'Log in';$('#apw').autocomplete=r?'new-password':'current-password'}
+async function hp(pw,salt){try{if(crypto&&crypto.subtle){var e=new TextEncoder(),k=await crypto.subtle.importKey('raw',e.encode(pw),'PBKDF2',false,['deriveBits']),b=await crypto.subtle.deriveBits({name:'PBKDF2',salt:e.encode(salt),iterations:100000,hash:'SHA-256'},k,256);return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}}catch(e){}
+  var h=5381,t=salt+pw;for(var i=0;i<t.length;i++)h=(h*33^t.charCodeAt(i))>>>0;return'f'+h}
+async function authGo(){var u=$('#au').value.trim(),pw=$('#apw').value,m=$('#am'),k=u.toLowerCase();
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(u)){m.textContent='Username: 3 to 16 letters, numbers or underscores.';return}
+  if(pw.length<4){m.textContent='Your password needs at least 4 characters.';return}
+  if(REG){if(USERS[k]){m.textContent='That username is already taken on this device.';return}
+    var salt=Math.random().toString(36).slice(2)+Date.now().toString(36),d=Object.assign(P0(),(OLD&&!Object.keys(USERS).length)?OLD:{});
+    USERS[k]={n:u,s:salt,h:await hp(pw,salt),save:d};su()}
+  else{var r=USERS[k];if(!r||await hp(pw,r.s)!==r.h){m.textContent='Wrong username or password.';return}}
+  CUR=k;try{localStorage.setItem('cr-session',$('#ak').checked?k:'')}catch(e){}enter()}
+function enter(){P=Object.assign(P0(),USERS[CUR].save);save();$('#auth').hidden=true;applySkin();setCoach();
+  if(P.coach<0){$('#cpick').hidden=false;cl($('#cpl'),()=>{$('#cpick').hidden=true;go('home')})}go('home')}
+$('#tl').onclick=()=>setReg(0);$('#tr').onclick=()=>setReg(1);$('#ago').onclick=authGo;
+$('#apw').onkeydown=e=>{if(e.key==='Enter')authGo()};
+$('#lo').onclick=()=>{try{localStorage.setItem('cr-session','')}catch(e){}location.reload()};
+function CO(){return COACHES[Math.max(0,P.coach)]}
+function setCoach(){var c=CO();['cav','hc'].forEach(id=>{var e=$('#'+id);e.style.setProperty('--a',c.x[0]);e.style.setProperty('--b',c.x[1]);e.innerHTML=c.svg});$('#cn').textContent=c.n}
+function cbar(k){var el=$('#cb-'+k);if(!el)return;var c=CO();el.innerHTML='<div class="pt bob" style="--s:60px;--a:'+c.x[0]+';--b:'+c.x[1]+'">'+c.svg+'</div><div class="bub">'+c.L[k]+'</div>'}
+function cl(el,cb){el.innerHTML=COACHES.map((c,i)=>'<button class="card" data-k="'+i+'" style="border:2px solid '+(P.coach===i?'var(--ac)':'transparent')+';animation-delay:'+i*.06+'s"><div class="cc"><div class="pt" style="--s:76px;--a:'+c.x[0]+';--b:'+c.x[1]+'">'+c.svg+'</div><div><b>'+c.n+'</b><span class="m" style="display:block">'+c.bio+'</span></div></div><span class="m" style="display:block;margin-top:10px">“'+c.L.greet+'”</span></button>').join('');
+  el.onclick=e=>{var b=e.target.closest('[data-k]');if(!b)return;P.coach=+b.dataset.k;save();setCoach();cl(el,cb);if(cb)cb()}}
+function prf(){var t='Rating '+P.elo+' | '+P.t+' tokens | '+P.w+'W '+P.d+'D '+P.l+'L';$('#prf').textContent=(CUR?USERS[CUR].n+' | ':'')+t;$('#pi').textContent=(CUR?'Signed in as '+USERS[CUR].n+'. ':'')+t+'. Win online games to earn tokens (50 win, 25 draw, 10 loss) and raise your rating.'}
+function go(v){view=v;['home','game','learn','review','bots','skins','prof'].forEach(x=>{$('#v-'+x).hidden=x!==v});
+  var nv=v==='game'||v==='bots'?'home':v;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===nv));
+  if(v==='learn'){$('#ll').hidden=false;$('#lv2').hidden=true}
+  if(v==='review')openReview();if(v==='bots')bots();if(v==='skins')skins();if(v==='prof')cl($('#pcl'));
+  if(v==='home'){var h=CO().L.home;$('#hb').textContent=h[Math.random()*h.length|0]}else cbar(v);
+  prf();window.scrollTo(0,0)}
+(function(){var ss=null;try{ss=localStorage.getItem('cr-session')}catch(e){}
+  $('#alin').innerHTML=COACHES.map(c=>'<div class="pt" style="--s:62px;--a:'+c.x[0]+';--b:'+c.x[1]+';margin-left:-10px">'+c.svg+'</div>').join('');
+  if(ss&&USERS[ss]){CUR=ss;enter()}else{$('#auth').hidden=false;setReg(Object.keys(USERS).length?0:1)}})();
 </script>
 </body>
 </html>
