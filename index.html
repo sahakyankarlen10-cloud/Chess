@@ -549,9 +549,7 @@ function go(v){view=v;['home','game','learn','review','bots','skins','prof'].for
   if(v==='review')openReview();if(v==='bots')bots();if(v==='skins')skins();if(v==='prof')cl($('#pcl'));
   if(v==='home'){var h=CO().L.home;$('#hb').textContent=h[Math.random()*h.length|0]}else cbar(v);
   prf();window.scrollTo(0,0)}
-(function(){var ss=null;try{ss=localStorage.getItem('cr-session')}catch(e){}
-  $('#alin').innerHTML=COACHES.map(c=>'<div class="pt" style="--s:62px;--a:'+c.x[0]+';--b:'+c.x[1]+';margin-left:-10px">'+c.svg+'</div>').join('');
-  if(ss&&USERS[ss]){CUR=ss;enter()}else{$('#auth').hidden=false;setReg(Object.keys(USERS).length?0:1)}})();
+
 
 var FX=null;
 function slide(l,root){var a=$(root+' [data-i="'+l[0]+'"]'),b=$(root+' [data-i="'+l[1]+'"]'),pc=b&&b.querySelector('.pc');if(!pc||!a)return;
@@ -594,7 +592,7 @@ midnight:{n:'Midnight',p:450,lt:'#5b6b86',dk:'#1f2937',fr:'#6d8bff'},
 neon:{n:'Neon Grid',p:550,lt:'rgba(40,40,110,.85)',dk:'rgba(10,10,40,.92)',bg:'#06061f',fr:'#00e5ff'},
 lava:{n:'Lava Rock (animated)',p:600,lt:'rgba(90,50,38,.78)',dk:'rgba(26,12,8,.84)',bg:'radial-gradient(circle at 20% 30%,#ff5a1f,transparent 45%),radial-gradient(circle at 80% 70%,#ffb347,transparent 40%),#2a0f08',fr:'#ff5a1f'},
 galaxy:{n:'Galaxy (animated)',p:750,lt:'rgba(255,255,255,.12)',dk:'rgba(0,0,30,.35)',bg:'radial-gradient(2px 2px at 20% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 70% 60%,#fff,transparent),radial-gradient(2px 2px at 45% 85%,#cde,transparent),linear-gradient(135deg,#1b1464,#6a1b9a,#0d47a1)',fr:'#b388ff'}};
-function applyBoard(){var k=BD[P.bd]||BD.classic,r=document.documentElement.style;r.setProperty('--lt',k.lt);r.setProperty('--dk',k.dk);r.setProperty('--bdbg',k.bg||'transparent');r.setProperty('--fr',k.fr||'transparent');document.body.dataset.bd=P.bd}
+function applyBoard(){if(typeof BD==='undefined')return;var k=BD[P.bd]||BD.classic,r=document.documentElement.style;r.setProperty('--lt',k.lt);r.setProperty('--dk',k.dk);r.setProperty('--bdbg',k.bg||'transparent');r.setProperty('--fr',k.fr||'transparent');document.body.dataset.bd=P.bd}
 var SKT='p';
 function skins(){$('#skm').textContent='Tokens: '+P.t+'. Earn them by playing online: 50 for a win, 25 for a draw, 10 for a loss.';
   document.querySelectorAll('#skt .btn').forEach(b=>b.className='btn'+(b.dataset.t===SKT?' pri':''));
@@ -687,6 +685,10 @@ function kpReveal(){if(!KPM||!KAid)return;var o=$('#kpov'),ord=mode==='online'?[
   o.hidden=false;$('#kgo').onclick=()=>{o.hidden=true}}
 $('#c-kp').onclick=()=>startGame('two','w',true);
 applyBoard();
+/* auto-login runs last, after everything is defined */
+(function(){var ss=null;try{ss=localStorage.getItem('cr-session')}catch(e){}
+  $('#alin').innerHTML=COACHES.map(c=>'<div class="pt" style="--s:62px;--a:'+c.x[0]+';--b:'+c.x[1]+';margin-left:-10px">'+c.svg+'</div>').join('');
+  if(ss&&USERS[ss]){CUR=ss;enter()}else{$('#auth').hidden=false;setReg(Object.keys(USERS).length?0:1)}})();
 </script>
 </body>
 </html>
